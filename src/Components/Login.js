@@ -15,10 +15,13 @@ const Login  = (props)=>{
     show:true
   });
    const beforeLoad = ()=>{
-      axios.get('http://localhost:1998/')
+      axios.get('http://localhost:1998/',{withCredentials:true})
       .then(function(response){
         if(response.data.route === "/homepage"){
           navigate("/homepage");
+        }
+        else if(response.data.route === "/login"){
+          navigate("/");
         }
         console.log(response.data.route);
       });
@@ -55,14 +58,23 @@ const Login  = (props)=>{
             headers:{
               'Content-Type': 'application/json'
             },
+             credentials:'include',
             body: JSON.stringify({username:document.getElementById("username").value, password:document.getElementById("password").value})
           });
           let postres = await post.json();
           if(postres.route === '/homepage'){
             navigate('/homepage');
           }
+          else if(postres.error){
+            swal({
+              title: postres.error,
+              text: "Please Check And Try Again",
+              icon: "error",
+              button: "Close This Alert",
+            });
+          }
          }
-         else if(allState.title == "Login"){
+         else if(allState.title === "Login"){
 
          }
       }

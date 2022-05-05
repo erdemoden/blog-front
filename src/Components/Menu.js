@@ -1,8 +1,26 @@
 import React from 'react';
 import '../Styles/Menu.css'
-
+import {useNavigate} from 'react-router-dom';
+import { useState ,useEffect } from 'react';
+const axios = require('axios');
 const Menu = (props)=>{
+    const navigate = useNavigate();
+        const beforeLoad = ()=>{
+            axios.get('http://localhost:1998/',{withCredentials:true})
+            .then(function(response){
+              if(response.data.route === "/homepage"){
+                navigate("/homepage");
+              }
+              else if(response.data.route === "/login"){
+                navigate("/");
+              }
+              console.log(response.data.route);
+            });
+           }
 
+    useEffect(() =>{
+        beforeLoad();
+      },[]);
     
     return ( 
         <nav className='navbar navbar-dark bg-dark fixed-top shadow flex'>
