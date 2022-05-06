@@ -110,12 +110,7 @@ const Login  = (props)=>{
     );
         }
     
-        const mapDispatchToProps = (dispatch) =>{
-          return{
-            setUserName: (username) =>{ dispatch({'type':'SET_NAME',username})}
-          }
-        }
 
 
 
-export default connect(mapDispatchToProps)(Login);
+export default Login;
