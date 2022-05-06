@@ -2,6 +2,7 @@ import React from 'react';
 import '../Styles/Menu.css'
 import {useNavigate} from 'react-router-dom';
 import { useState ,useEffect } from 'react';
+import { connect } from 'react-redux';
 const axios = require('axios');
 const Menu = (props)=>{
     const navigate = useNavigate();
@@ -31,6 +32,11 @@ const Menu = (props)=>{
             <button type="button" className='btn btn-success' id='buttons'>Log-Out</button>         
             </nav>
     );
+    const mapStateToProps = (state)=>{
+      return{
+        username:state.username
+      }
+    }
 }
 
-export default Menu;
+export default connect(mapStateToProps) (Menu);

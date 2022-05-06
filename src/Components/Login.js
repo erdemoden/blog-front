@@ -4,6 +4,7 @@ import Bounce from 'react-reveal/Bounce';
 import {useNavigate} from 'react-router-dom';
 import { useState ,useEffect } from 'react';
 import swal from 'sweetalert';
+import { connect } from 'react-redux';
 const axios = require('axios');
 let number = 1;
 const Login  = (props)=>{
@@ -108,7 +109,13 @@ const Login  = (props)=>{
            
     );
         }
+    
+        const mapDispatchToProps = (dispatch) =>{
+          return{
+            setUserName: (username) =>{ dispatch({'type':'SET_NAME',username})}
+          }
+        }
 
 
 
-export default Login;
+export default connect(mapDispatchToProps)(Login);
