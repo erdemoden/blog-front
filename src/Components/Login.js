@@ -1,10 +1,13 @@
 import '../Styles/Background.css'
 import '../Styles/FormDesign.css'
 import Bounce from 'react-reveal/Bounce';
+import cookies from 'js-cookie'
 import {useNavigate} from 'react-router-dom';
 import { useState ,useEffect } from 'react';
 import swal from 'sweetalert';
 import { connect } from 'react-redux';
+import { GetWithAuth } from '../Services/HttpServices';
+import { GetWithRefresh } from '../Services/HttpServices';
 const axios = require('axios');
 let number = 1;
 const Login  = (props)=>{
@@ -16,16 +19,19 @@ const Login  = (props)=>{
     show:true
   });
    const beforeLoad = ()=>{
-      axios.get('http://localhost:1998/',{withCredentials:true})
-      .then(function(response){
-        if(response.data.route === "/homepage"){
-          navigate("/homepage");
-        }
-        else if(response.data.route === "/login"){
-          navigate("/");
-        }
-        console.log(response.data.route);
-      });
+    let response =GetWithAuth("http://localhost:1998/");
+    if(response.data.route ==="Error"){
+      let response2 = GetWithRefresh("http://localhost:1998/");
+      if(response2.data.route === "Error"){
+        navigate("/");
+      }
+      else{
+        navigate(response.data.route);
+      }
+    }
+    else{
+      navigate(response.data.route);
+    }
      }
       const handleClick = ()=>{
           if(allState.show === false && number === 1){
@@ -76,7 +82,26 @@ const Login  = (props)=>{
           }
          }
          else if(allState.title === "Login"){
-
+          let post = await fetch('http://localhost:1998/signup',{
+            method:'POST',
+            headers:{
+              'Content-Type': 'application/json'
+            },
+             credentials:'include',
+            body: JSON.stringify({username:document.getElementById("username").value, password:document.getElementById("password").value})
+          });
+          let postres = await post.json();
+          if(postres.route === '/homepage'){
+            navigate('/homepage');
+          }
+          else if(postres.error){
+            swal({
+              title: postres.error,
+              text: "Please Check And Try Again",
+              icon: "error",
+              button: "Close This Alert",
+            });
+          }
          }
       }
       useEffect(() =>{
