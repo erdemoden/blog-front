@@ -1,5 +1,6 @@
-import { json } from "express/lib/response";
+//import { json } from "express/lib/response";
 import cookies from 'js-cookie'
+
 export const PostWithAuth = async(url,body)=>{
 var request = await fetch(url,{
 method:'POST',
@@ -21,10 +22,10 @@ export const GetWithRefresh = async(url)=>{
             "Authorization":cookies.get("rfs")
         }
     });
-    return response;
+    return await response.json();
 }
-export const GetWithAuth = async(url)=>{
-    var response = await fetch(url,{
+ export const GetWithAuth = async(url)=>{
+   const response = await fetch(url,{
         method:'GET',
         withCredentials:true,
         headers:{
@@ -32,5 +33,5 @@ export const GetWithAuth = async(url)=>{
             "Authorization":cookies.get("acs")
         }
     });
-    return response;
+    return await response.json()
 }

@@ -6,9 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import { useState ,useEffect } from 'react';
 import swal from 'sweetalert';
 import { connect } from 'react-redux';
-import { GetWithAuth } from '../Services/HttpServices';
-import { GetWithRefresh } from '../Services/HttpServices';
-const axios = require('axios');
+import {GetWithAuth ,GetWithRefresh} from '../Services/HttpServices';
 let number = 1;
 const Login  = (props)=>{
   const navigate = useNavigate();
@@ -18,19 +16,20 @@ const Login  = (props)=>{
     button:props.button,
     show:true
   });
-   const beforeLoad = ()=>{
-    let response =GetWithAuth("http://localhost:1998/");
-    if(response.data.route ==="Error"){
+   const beforeLoad = async ()=>{
+    let response =await GetWithAuth("http://localhost:1998/");
+    if(response.route =="/Error"){
       let response2 = GetWithRefresh("http://localhost:1998/");
-      if(response2.data.route === "Error"){
-        navigate("/");
+      if(response2.route == "/Error"){
+        console.log("Merhaba");
       }
       else{
-        navigate(response.data.route);
+        navigate(response.route);
+        console.log("Merhaba2");
       }
     }
     else{
-      navigate(response.data.route);
+      console.log("Merhaba3");
     }
      }
       const handleClick = ()=>{
@@ -112,6 +111,7 @@ const Login  = (props)=>{
               if(allState.show === true && number === 1){
                 setAllState({show:false,message:"Have Account ?",title:"Sign-Up"});
                 number = 2;
+                console.log(allState.message);
               }
               else if(allState.show === true && number === 2){
                 setAllState({show:false,message:"Don't Have Account ?",title:"Login"});
